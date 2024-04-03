@@ -8,7 +8,7 @@ const CallToAction = () => {
     <>
 
 
-<div className="relative mt-10">
+<div className="relative mt-10 overflow-hidden">
   <div
     className="bg-no-repeat bg-cover bg-center h-full py-28 "
     style={{ backgroundImage: `url(${bgimage})` }}
