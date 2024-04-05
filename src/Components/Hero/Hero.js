@@ -1,97 +1,99 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import bgimage from '../Assets/hero.jpg';
-import {motion} from 'framer-motion';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 
-
-const slidesContent = [
-  {
-    title: "Slide 1",
-    subtitle: "FOR WEBSITE AND VIDEO EDITING",
-    description: "VIDEOGRAPHER'S PORTFOLIO",
-    buttonText: "SEE MORE ABOUT US",
-  },
-  {
-    title: "Slide 2",
-    subtitle: "FOR WEBSITE AND VIDEO EDITING",
-    description: "VIDEOGRAPHER'S PORTFOLIO",
-    buttonText: "SEE MORE ABOUT US",
-  },
-  {
-    title: "Slide 3",
-    subtitle: "FOR WEBSITE AND VIDEO EDITING",
-    description: "VIDEOGRAPHER'S PORTFOLIO",
-    buttonText: "SEE MORE ABOUT US",
-  },
-];
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const sliderRef = useRef();
+
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: false,
+    pauseOnHover: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+    ],
+  };
+
+  const slidesContent = [
+    {
+      title: "VIDEOGRAPHER'S PORTFOLIO",
+      description: 'FOR WEBSITE AND VIDEO EDITING',
+      buttonText: 'SEE MORE ABOUT US',
+    },
+    {
+      title: "VIDEOGRAPHER'S PORTFOLIO",
+      description: 'FOR WEBSITE AND VIDEO EDITING',
+      buttonText: 'SEE MORE ABOUT US',
+    },
+    {
+      title: "VIDEOGRAPHER'S PORTFOLIO",
+      description: 'FOR WEBSITE AND VIDEO EDITING',
+      buttonText: 'SEE MORE ABOUT US',
+    },
+  ];
 
   const goToSlide = (index) => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentSlide(index);
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 1000); // Adjust duration as needed
-    }
+    sliderRef.current.slickGoTo(index);
+    setCurrentSlide(index);
   };
-
-  const goToPreviousSlide = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentSlide((prevSlide) =>
-        prevSlide === 0 ? slidesContent.length - 1 : prevSlide - 1
-      );
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 1000); // Adjust duration as needed
-    }
-  };
-
-  const goToNextSlide = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentSlide((prevSlide) =>
-        prevSlide === slidesContent.length - 1 ? 0 : prevSlide + 1
-      );
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 1000); // Adjust duration as needed
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(goToNextSlide, 5000); // Change slide every 5 seconds
-    return () => clearInterval(interval);
-  }, []); // Run only once on mount
 
   return (
     <>
-    <div className="relative">
-      <div
-        className="bg-no-repeat bg-cover bg-center h-[700px]"
-        style={{ backgroundImage: `url(${bgimage})` }}
-      >
-        {/* Container for responsive content */}
-        <div className="absolute inset-0 mt-24 flex items-center justify-start ps-5 sm:ps-20 sm:pe-6 pe-2">
-        <motion.div
-              initial={{x:-100,opacity:0}}
-     whileInView={{x: 0, opacity: 1}}
-     transition={{delay:0.2, x:{type:"spring", stiffness:60},opacity:{duration:1},ease:"easeIn",
-     duration:1}}
-           className=" text-white w-full sm:w-auto">
-          <div className="font-medium tracking-widest mb-6">{slidesContent[currentSlide].subtitle}</div>
-            <div className={`md:text-6xl sm:w-11/12 sm:text-4xl text-2xl font-semibold ${isAnimating ? "opacity-0" : "opacity-100"} transition-opacity duration-1000`} style={{lineHeight:"4.5rem"}}>
-              {slidesContent[currentSlide].description}
-            </div>
-            <button className="relative mt-10 border-[#00bfe7] border-2 hover:bg-[#00bfe7] overflow-hidden bg-transparent text-white px-6 py-3 text-lg focus:outline-none group">
-              <span className="relative z-10">{slidesContent[currentSlide].buttonText}</span>
-            </button>
+    <div className="sm:ps-14 ps-4 pe-4 relative overflow-hidden py-28">
+     <div
+        className="absolute inset-0 bg-no-repeat bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${bgimage})`,
+          width: '100%',
+          height: '100%',
+        }}
+      ></div>
+      <div className="absolute inset-0"></div>
+      <div className="relative z-10 w-full md:max-w-2xl sm:max-w-xl mt-14">
+        <Slider {...settings} ref={sliderRef} beforeChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}>
+          {slidesContent.map((slide, index) => (
+            <div key={index} className="w-full my-6 relative group">
+              <div className="py-5 sm:ps-10 ps-3">
+                <div className="font-medium tracking-widest text-white mb-6">{slide.description}</div>
 
-          <div className="flex space-x-5 ps-1 text-lg mt-20">
+                <h1 className="md:text-6xl sm:w-11/12 sm:text-4xl text-white text-2xl font-semibold" style={{ lineHeight: '4.5rem' }}>
+                  {slide.title}
+                </h1>
+              </div>
+              <div className="sm:ps-11 ps-3">
+                <button type="submit" className={`font-medium mt-5 duration-300 flex items-center justify-center px-7 py-3 border-2  text-white hover:bg-[#00bfe7] ${slide.buttonColor} border-[#00bfe7]`}>
+                  {slide.buttonText}
+                </button>
+              </div>
+            </div>
+          ))}
+        </Slider>
+        <div className="flex space-x-5 sm:ps-12 ps-4 text-lg mt-12">
           {slidesContent.map((_, index) => (
             <h1
               key={index}
@@ -101,9 +103,6 @@ const Hero = () => {
               0{index + 1}
             </h1>
           ))}
-        </div>
-
-          </motion.div>
         </div>
       </div>
     </div>

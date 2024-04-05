@@ -149,7 +149,7 @@ const Footer = () => {
 
 
         <div class='tracking-wider text-center mx-auto max-w-[1240px] mt-20'>
-            <h1 class='text-gray-300/75'>© Copyright © 2024 All rights reserved | Designed By Sudais Khan .</h1>
+            <h1 class='text-gray-300/75'>Copyright © 2024 All rights reserved | Designed By Sudais Khan .</h1>
         </div>
 
 
